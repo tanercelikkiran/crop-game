@@ -19,6 +19,10 @@ export default function SignInPage() {
 
   const checkCredentials = (username: string, password: string) => {
     const users = getCredentials();
+    if (username === "" || password === "") {
+      alert("Username or password cannot be empty");
+      return false;
+    }
     return users.some(
       (user: { username: string; password: string }) =>
         user.username === username && user.password === password
@@ -27,13 +31,12 @@ export default function SignInPage() {
 
   const handleSignIn = () => {
     if (checkCredentials(username, password)) {
-      // Redirect to the home page or dashboard
       router.push("/game");
     } else {
       // Handle invalid credentials
       alert("Invalid username or password");
     }
- };
+  };
 
   return (
     <div>
