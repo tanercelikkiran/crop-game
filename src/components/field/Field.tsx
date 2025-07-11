@@ -1,32 +1,42 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Field.module.css";
-
-interface FieldProps {
-  state?: string;
-}
 
 export default function Field() {
   const [state, setState] = useState("Ready");
-  function handleClick() {
-    switch (state) {
-      case "Ready":
-        setState("Seed");
-        break;
-      case "Seed":
-        setState("Sapling");
-        break;
-      case "Sapling":
-        setState("Plant");
-        break;
-      case "Plant":
-        setState("Flower");
-        break;
-      case "Flower":
-        setState("Dried Flower");
-        break;
+  const [isFlower, setIsFlower] = useState(false);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | null = null;
+    if (state !== "Ready" && state !== "Dried Flower") {
+      const currentInterval = state === "Flower" ? 4000 : 2000;
+      intervalId = setInterval(() => {
+        setState((prevState) => {
+          switch (prevState) {
+            case "Seed":
+              return "Sapling";
+            case "Sapling":
+              return "Plant";
+            case "Plant":
+              setIsFlower(true);
+              return "Flower";
+            case "Flower":
+              return "Dried Flower";
+          }
+          return prevState;
+        });
+      }, currentInterval);
     }
-  }
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [state]);
+
+  const handleClick = () => {
+    if (state === "Ready") {
+      setState("Seed");
+    }
+  };
 
   return (
     <div>
