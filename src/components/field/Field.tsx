@@ -1,37 +1,63 @@
 "use client";
-import { useEffect, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
+import { BalanceContext } from "@/context/BalanceContext";
 import styles from "./Field.module.css";
 
-export default function Field() {
+function Field() {
+  const balanceContext = useContext(BalanceContext);
+
   const [index, setIndex] = useState(0);
-  const [isFlower, setIsFlower] = useState(false);
-  const states = [
-    "Ready",
-    "Seed",
-    "Sapling",
-    "Plant",
-    "Flower",
-    "Dried Flower",
-  ];
+  const [isGrowing, setIsGrowing] = useState(false);
 
+  const states = ["", "Seed", "Sapling", "Plant", "Flower", "Dried Flower"];
+
+  // Effect to handle growth from Seed to Flower
   useEffect(() => {
-    let intervalId: NodeJS.Timeout | null = null;
+    if (isGrowing && index >= 1 && index < 4) {
+      const intervalId = setInterval(() => {
+        setIndex((prevState) => {
+          if (prevState < 4) {
+            return prevState + 1;
+          } else {
+            return prevState;
+          }
+        });
+      }, 2000);
 
-    if (index !== 0 && index !== 5) {
-      const currentInterval = index === 4 ? 4000 : 2000;
-      intervalId = setInterval(() => {
-        setIndex((prevState) => prevState + 1);
-      }, currentInterval);
+      return () => {
+        clearInterval(intervalId);
+      };
     }
+  }, [isGrowing]);
 
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [index]);
+  // Effect to handle transition from Flower to Dried Flower
+  useEffect(() => {
+    if (index === 4) {
+      const timeoutId = setTimeout(() => {
+        setIndex(5);
+      }, 4000);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [isGrowing]);
 
   const handleClick = () => {
-    if (index === 0) {
+    if (index === 0 && balanceContext?.balance >= 10) {
+      // Plant a seed if the field is empty and balance is sufficient
       setIndex(1);
+      setIsGrowing(true);
+      balanceContext?.decreaseBalance(10);
+    } else if (index === 4) {
+      // Harvest the flower
+      setIndex(0);
+      setIsGrowing(false);
+      balanceContext?.increaseBalance(20);
+    } else if (index === 5) {
+      // Reset dried flower to empty
+      setIndex(0);
+      setIsGrowing(false);
     }
   };
 
@@ -43,3 +69,5 @@ export default function Field() {
     </div>
   );
 }
+
+export default memo(Field);

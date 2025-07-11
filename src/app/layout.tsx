@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { BalanceProvider } from "@/context/BalanceContext";
 
 export const metadata: Metadata = {
   title: "Crop Game",
@@ -12,8 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-google-analytics-opt-out="">
-      <body>{children}</body>
-    </html>
+    <BalanceProvider>
+      <html lang="en" data-google-analytics-opt-out="">
+        <body>{children}</body>
+      </html>
+    </BalanceProvider>
   );
 }
