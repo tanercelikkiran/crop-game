@@ -1,0 +1,10 @@
+.chooseBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    z-index: 1000;
+}

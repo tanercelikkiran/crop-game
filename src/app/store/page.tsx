@@ -5,19 +5,17 @@ import styles from "./page.module.css";
 import Image from "next/image";
 import { SeedContext } from "@/context/SeedContext";
 import Button from "@/components/button/Button";
+import { useRouter } from "next/navigation";
 
-export default function ChooseBox({
-  setIsShown,
-}: {
-  setIsShown: (value: boolean) => void;
-}) {
+export default function StorePage() {
   const seedContext = useContext(SeedContext);
+  const router = useRouter();
 
   return (
     <div className={styles.chooseBox}>
       <h2>Choose your crop to buy</h2>
       {seedContext &&
-        Object.keys(seedContext.types).map((type, index) => (
+        Object.keys(seedContext.seeds).map((type, index) => (
           <div key={index} className={styles.cropItem}>
             <Image
               src={`/images/${type}.png`}
@@ -25,18 +23,36 @@ export default function ChooseBox({
               width={100}
               height={100}
             />
-            <h3>{type}</h3>
-            <p>Price: {seedContext.types[type]} coins</p>
+            <h3>{type.charAt(0).toUpperCase() + type.slice(1)}</h3>
+            <p>
+              Price:{" "}
+              {seedContext.seeds[type as keyof typeof seedContext.seeds].price}{" "}
+              coins
+            </p>
             <Button
               onClick={() => {
-                seedContext.buySeed(type, seedContext.types[type]);
-                setIsShown(false);
+                seedContext.buySeed(
+                  type as "tulip" | "daisy",
+                  seedContext.seeds[type as keyof typeof seedContext.seeds]
+                    .price
+                );
               }}
             >
-              Buy {type}
+              Buy {type.charAt(0).toUpperCase() + type.slice(1)}
             </Button>
+            <label>
+              Amount:{" "}
+              {seedContext.seeds[type as keyof typeof seedContext.seeds].count}
+            </label>
           </div>
         ))}
+        <Button
+          onClick={() => {
+            router.push("/game");
+          }}
+        >
+          Go to Game
+        </Button>
     </div>
   );
 }

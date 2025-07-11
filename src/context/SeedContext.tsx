@@ -1,70 +1,70 @@
 "use client";
 
-import { createContext, useState } from "react";
-import { useContext } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 import { BalanceContext } from "./BalanceContext";
 
-interface SeedContextType {
-  types: {
-    Tulip: number;
-    Daisy: number;
-  };
-  tulipCount: number;
-  daisyCount: number;
-  buySeed: (itemType: string, cost: number) => boolean;
-  plantSeed: (itemType: string) => void;
+interface Seed {
+  count: number;
+  price: number;
 }
 
-export const SeedContext = createContext<SeedContextType | undefined>(
-  undefined
-);
+interface SeedState {
+  tulip: Seed;
+  daisy: Seed;
+}
 
-export function SeedProvider({ children }: { children: React.ReactNode }) {
+interface SeedContextType {
+  seeds: SeedState;
+  buySeed: (seedType: "tulip" | "daisy", cost: number) => boolean;
+  plantSeed: (seedType: "tulip" | "daisy") => void;
+}
+
+export const SeedContext = createContext<SeedContextType | undefined>(undefined);
+
+export function SeedProvider({ children }: { children: ReactNode }) {
   const balanceContext = useContext(BalanceContext);
-  const [types, setTypes] = useState({
-    Tulip: 10,
-    Daisy: 20,
-  });
-  const [tulipCount, setTulipCount] = useState(0);
-  const [daisyCount, setDaisyCount] = useState(0);
 
-  const buySeed = (itemType: string, cost: number) => {
-    console.log(balanceContext?.balance, cost);
+  const [seeds, setSeeds] = useState<SeedState>({
+    tulip: { count: 1, price: 10 },
+    daisy: { count: 1, price: 20 },
+  });
+
+  const buySeed = (seedType: "tulip" | "daisy", cost: number): boolean => {
     if (!balanceContext || balanceContext.balance < cost) {
-      alert("Insufficient balance to buy this item.");
+      alert("Insufficient funds to purchase this seed.");
       return false;
     }
+
     balanceContext.decreaseBalance(cost);
-    if (itemType === "tulip") {
-      setTulipCount((prevCount) => prevCount + 1);
-    } else if (itemType === "daisy") {
-      setDaisyCount((prevCount) => prevCount + 1);
-    }
+    setSeeds((prev) => ({
+      ...prev,
+      [seedType]: {
+        ...prev[seedType],
+        count: prev[seedType].count + 1,
+      },
+    }));
     return true;
   };
 
-  const plantSeed = (itemType: string) => {
-    if (itemType === "tulip") {
-      if (tulipCount <= 0) {
-        alert("No tulips available to plant.");
-        return;
-      }
-      setTulipCount((prevCount) => prevCount - 1);
-    } else if (itemType === "daisy") {
-      if (daisyCount <= 0) {
-        alert("No daisies available to plant.");
-        return;
-      }
-      setDaisyCount((prevCount) => prevCount - 1);
+  const plantSeed = (seedType: "tulip" | "daisy"): void => {
+    if (seeds[seedType].count <= 0) {
+      alert(`No ${seedType}s available to plant.`);
+      return;
     }
+
+    setSeeds((prev) => ({
+      ...prev,
+      [seedType]: {
+        ...prev[seedType],
+        count: prev[seedType].count - 1,
+      },
+    }));
   };
 
   return (
     <SeedContext.Provider
       value={{
-        types,
-        tulipCount,
-        daisyCount,
+        seeds,
         buySeed,
         plantSeed,
       }}

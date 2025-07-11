@@ -1,65 +1,47 @@
 "use client";
-import { memo, useContext, useEffect, useState } from "react";
-import { BalanceContext } from "@/context/BalanceContext";
+import { memo, useEffect, useState } from "react";
 import styles from "./Field.module.css";
 
-function Field({ setIsShown }: { setIsShown: (value: boolean) => void }) {
-  const balanceContext = useContext(BalanceContext);
-
+function Field({
+  onClick,
+  isGrowing: startGrowing,
+}: {
+  onClick: () => void;
+  isGrowing: boolean;
+}) {
   const [index, setIndex] = useState(0);
   const [isGrowing, setIsGrowing] = useState(false);
   const states = ["", "Seed", "Sapling", "Plant", "Flower", "Dried Flower"];
 
-  // Effect to handle growth from Seed to Flower
+  // when parent flags this field to start, initialize it
+  useEffect(() => {
+    if (startGrowing && !isGrowing) {
+      setIndex(1);
+      setIsGrowing(true);
+    }
+  }, [startGrowing]);
+
+  // Seed→Plant growth
   useEffect(() => {
     if (isGrowing && index >= 1 && index < 4) {
       const intervalId = setInterval(() => {
-        setIndex((prevState) => {
-          if (prevState < 4) {
-            return prevState + 1;
-          } else {
-            return prevState;
-          }
-        });
+        setIndex((prev) => (prev < 4 ? prev + 1 : prev));
       }, 2000);
-
-      return () => {
-        clearInterval(intervalId);
-      };
+      return () => clearInterval(intervalId);
     }
   }, [isGrowing]);
 
-  // Effect to handle transition from Flower to Dried Flower
+  // Flower→Dried Flower
   useEffect(() => {
     if (index === 4) {
-      const timeoutId = setTimeout(() => {
-        setIndex(5);
-      }, 4000);
-
-      return () => {
-        clearTimeout(timeoutId);
-      };
+      const timeoutId = setTimeout(() => setIndex(5), 4000);
+      return () => clearTimeout(timeoutId);
     }
-  }, [isGrowing]);
-
-  const handleClick = () => {
-    if (index === 0 && balanceContext?.balance >= 10) {
-      setIsShown(true);
-    } else if (index === 4) {
-      // Harvest the flower
-      setIndex(0);
-      setIsGrowing(false);
-      balanceContext?.increaseBalance(20);
-    } else if (index === 5) {
-      // Reset dried flower to empty
-      setIndex(0);
-      setIsGrowing(false);
-    }
-  };
+  }, [index]);
 
   return (
     <div>
-      <button className={styles.field} onClick={handleClick}>
+      <button className={styles.field} onClick={onClick}>
         {states[index]}
       </button>
     </div>
