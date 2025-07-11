@@ -3,12 +3,11 @@ import { memo, useContext, useEffect, useState } from "react";
 import { BalanceContext } from "@/context/BalanceContext";
 import styles from "./Field.module.css";
 
-function Field() {
+function Field({ setIsShown }: { setIsShown: (value: boolean) => void }) {
   const balanceContext = useContext(BalanceContext);
 
   const [index, setIndex] = useState(0);
   const [isGrowing, setIsGrowing] = useState(false);
-
   const states = ["", "Seed", "Sapling", "Plant", "Flower", "Dried Flower"];
 
   // Effect to handle growth from Seed to Flower
@@ -45,10 +44,7 @@ function Field() {
 
   const handleClick = () => {
     if (index === 0 && balanceContext?.balance >= 10) {
-      // Plant a seed if the field is empty and balance is sufficient
-      setIndex(1);
-      setIsGrowing(true);
-      balanceContext?.decreaseBalance(10);
+      setIsShown(true);
     } else if (index === 4) {
       // Harvest the flower
       setIndex(0);

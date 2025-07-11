@@ -4,7 +4,10 @@ export default function ChooseBox() {
   return (
     <div className={styles["choose-box"]}>
       <h2>Choose your crop</h2>
-      {/* Add your crop selection logic here */}
+      <select>
+        <option value="Tulip">Tulip</option>
+        <option value="Daisy">Daisy</option>
+      </select>
     </div>
   );
 }
