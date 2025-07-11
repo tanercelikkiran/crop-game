@@ -3,45 +3,42 @@ import { useEffect, useState } from "react";
 import styles from "./Field.module.css";
 
 export default function Field() {
-  const [state, setState] = useState("Ready");
+  const [index, setIndex] = useState(0);
   const [isFlower, setIsFlower] = useState(false);
+  const states = [
+    "Ready",
+    "Seed",
+    "Sapling",
+    "Plant",
+    "Flower",
+    "Dried Flower",
+  ];
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
-    if (state !== "Ready" && state !== "Dried Flower") {
-      const currentInterval = state === "Flower" ? 4000 : 2000;
+
+    if (index !== 0 && index !== 5) {
+      const currentInterval = index === 4 ? 4000 : 2000;
       intervalId = setInterval(() => {
-        setState((prevState) => {
-          switch (prevState) {
-            case "Seed":
-              return "Sapling";
-            case "Sapling":
-              return "Plant";
-            case "Plant":
-              setIsFlower(true);
-              return "Flower";
-            case "Flower":
-              return "Dried Flower";
-          }
-          return prevState;
-        });
+        setIndex((prevState) => prevState + 1);
       }, currentInterval);
     }
+
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [state]);
+  }, [index]);
 
   const handleClick = () => {
-    if (state === "Ready") {
-      setState("Seed");
+    if (index === 0) {
+      setIndex(1);
     }
   };
 
   return (
     <div>
       <button className={styles.field} onClick={handleClick}>
-        {state}
+        {states[index]}
       </button>
     </div>
   );
