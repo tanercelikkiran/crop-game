@@ -13,12 +13,10 @@ export default function GamePage() {
   const seedContext = useContext(SeedContext);
   const router = useRouter();
 
-  // Plant type selection
   const [selectedPlant, setSelectedPlant] = useState<"tulip" | "daisy">(
     "tulip"
   );
 
-  // Track which fields are growing and their plant types
   const [fieldStates, setFieldStates] = useState<
     Array<{
       isGrowing: boolean;
@@ -27,7 +25,6 @@ export default function GamePage() {
   >(Array(16).fill({ isGrowing: false, plantType: null }));
 
   const handlePlantSeed = (fieldIndex: number) => {
-    // Only plant if field is empty and user has seeds
     if (
       !fieldStates[fieldIndex].isGrowing &&
       seedContext &&

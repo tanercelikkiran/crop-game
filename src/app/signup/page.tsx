@@ -14,7 +14,6 @@ export default function SignInPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const getCredentials = () => {
-    // It will get credentials from a local storage as json list
     const credentials = localStorage.getItem("users");
     return credentials ? JSON.parse(credentials) : [];
   };

@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import styles from "./InputBox.module.css";
 
 interface InputBoxProps {

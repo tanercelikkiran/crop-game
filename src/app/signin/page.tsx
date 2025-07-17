@@ -33,7 +33,6 @@ export default function SignInPage() {
     if (checkCredentials(username, password)) {
       router.push("/game");
     } else {
-      // Handle invalid credentials
       alert("Invalid username or password");
     }
   };

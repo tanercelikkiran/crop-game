@@ -11,7 +11,6 @@ export default function StorePage() {
   const seedContext = useContext(SeedContext);
   const router = useRouter();
 
-  // State to track bulk purchase quantities for each seed type
   const [bulkQuantities, setBulkQuantities] = useState<{
     [key: string]: number;
   }>({
@@ -35,7 +34,6 @@ export default function StorePage() {
 
     const success = seedContext.bulkBuySeed(seedType, quantity, totalCost);
     if (success) {
-      // Reset quantity to 1 after successful purchase
       setBulkQuantities((prev) => ({
         ...prev,
         [seedType]: 1,

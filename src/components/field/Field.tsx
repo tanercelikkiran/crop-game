@@ -20,7 +20,7 @@ function Field({
   const getImageSrc = (stageIndex: number): string | null => {
     switch (stageIndex) {
       case 0:
-        return null; // Empty field
+        return null;
       case 1:
         return "/Seeding.png";
       case 2:
@@ -36,7 +36,6 @@ function Field({
     }
   };
 
-  // when parent flags this field to start, initialize it
   useEffect(() => {
     if (startGrowing && !isGrowing) {
       setIndex(1);
@@ -44,7 +43,6 @@ function Field({
     }
   }, [startGrowing]);
 
-  // Seed→Plant growth
   useEffect(() => {
     if (isGrowing && index >= 1 && index < 4) {
       const intervalId = setInterval(() => {
@@ -54,7 +52,6 @@ function Field({
     }
   }, [isGrowing]);
 
-  // Flower→Dried Flower
   useEffect(() => {
     if (index === 4) {
       const timeoutId = setTimeout(() => setIndex(5), 4000);
@@ -67,16 +64,13 @@ function Field({
       <button
         className={`${styles.field} ${isGrowing ? styles.growing : ""}`}
         onClick={() => {
-          // If field is growing (any stage), reset it
           if (isGrowing && index > 0) {
-            // Only give money if in flower stage (stage 4)
             if (index === 4 && plantType && onCollect) {
               onCollect(plantType);
             }
-            setIndex(0); // Reset field to empty
+            setIndex(0);
             setIsGrowing(false);
           } else {
-            // If field is empty, let parent handle the click (for planting)
             onClick();
           }
         }}

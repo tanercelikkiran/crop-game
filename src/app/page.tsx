@@ -13,8 +13,7 @@ export default function Home() {
       <div className={styles.welcomeCard}>
         <h1 className={styles.title}>🌱 Crop Game</h1>
         <p className={styles.subtitle}>
-          Welcome to the most exciting farming adventure! Plant, grow, and
-          harvest your way to success.
+          Welcome to the most exciting farming adventure! 
         </p>
         <div className={styles.buttonContainer}>
           <Button
