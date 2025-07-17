@@ -66,7 +66,7 @@ export default function SignInPage() {
               placeholder="Enter your username"
               onChange={(e) => setUsername(e.target.value)}
             >
-              Username:
+              Username
             </InputBox>
           </div>
 
@@ -77,7 +77,7 @@ export default function SignInPage() {
               placeholder="Enter your password"
               onChange={(e) => setPassword(e.target.value)}
             >
-              Password:
+              Password
             </InputBox>
           </div>
 
@@ -88,7 +88,7 @@ export default function SignInPage() {
               placeholder="Confirm your password"
               onChange={(e) => setConfirmPassword(e.target.value)}
             >
-              Confirm Password:
+              Confirm Password
             </InputBox>
           </div>
 

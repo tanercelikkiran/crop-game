@@ -19,12 +19,14 @@ export default function StorePage() {
           {seedContext &&
             Object.keys(seedContext.seeds).map((type, index) => (
               <div key={index} className={styles.cropItem}>
-                <Image
-                  src={`/${type === "tulip" ? "Tulip" : "Daisy"}.png`}
-                  alt={`${type} image`}
-                  width={80}
-                  height={80}
-                />
+                <div className={styles.cropImage}>
+                  <Image
+                    src={`/${type === "tulip" ? "Tulip" : "Daisy"}.png`}
+                    alt={`${type} image`}
+                    width={80}
+                    height={80}
+                  />
+                </div>
                 <h3>
                   {type === "tulip" ? "🌷" : "🌼"}{" "}
                   {type.charAt(0).toUpperCase() + type.slice(1)}
