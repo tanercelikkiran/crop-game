@@ -85,10 +85,9 @@ function Field({
           <Image
             src={getImageSrc(index)!}
             alt={`Plant stage ${index}`}
-            width={76}
-            height={76}
+            width={70}
+            height={70}
             className={styles.fieldImage}
-            style={{ objectFit: "contain" }}
           />
         ) : null}
       </button>
