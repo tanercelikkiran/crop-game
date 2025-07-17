@@ -18,6 +18,9 @@ export default function GamePage() {
     "tulip"
   );
   const [fieldStages, setFieldStages] = useState<number[]>(Array(16).fill(0));
+  const [fieldPlantTypes, setFieldPlantTypes] = useState<(string | null)[]>(
+    Array(16).fill(null)
+  );
 
   return (
     <div>
@@ -50,13 +53,22 @@ export default function GamePage() {
             onClick={() => {
               const stage = fieldStages[i];
               if (stage > 0) {
-                if (stage === 2) {  
+                if (stage === 2) {
                 }
                 setFieldStages((prev) => {
                   const next = [...prev];
                   next[i] = stage === 1 ? 2 : 0; // seeded→flower, flower→empty
                   return next;
                 });
+                // Reset plant type when field becomes empty
+                if (stage === 4) {
+                  // flower stage, next click will make it empty
+                  setFieldPlantTypes((prev) => {
+                    const next = [...prev];
+                    next[i] = null;
+                    return next;
+                  });
+                }
               } else {
                 // Only plant if user has seeds of selected type
                 if (seedContext && seedContext.seeds[selectedPlant].count > 0) {
@@ -66,10 +78,17 @@ export default function GamePage() {
                     next[i] = 1; // planted → seeded
                     return next;
                   });
+                  // Set the plant type for this field
+                  setFieldPlantTypes((prev) => {
+                    const next = [...prev];
+                    next[i] = selectedPlant;
+                    return next;
+                  });
                 }
               }
             }}
             isGrowing={fieldStages[i] > 0}
+            plantType={fieldPlantTypes[i] as "tulip" | "daisy" | undefined}
           />
         ))}
       </div>

@@ -6,4 +6,8 @@
     cursor: pointer;
     background-color: rgb(116, 55, 31);
     color: aliceblue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
 }

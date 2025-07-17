@@ -1,17 +1,38 @@
 "use client";
 import { memo, useEffect, useState } from "react";
 import styles from "./Field.module.css";
+import Image from "next/image";
 
 function Field({
   onClick,
   isGrowing: startGrowing,
+  plantType,
 }: {
   onClick: () => void;
   isGrowing: boolean;
+  plantType?: "tulip" | "daisy";
 }) {
   const [index, setIndex] = useState(0);
   const [isGrowing, setIsGrowing] = useState(false);
-  const states = ["", "Seed", "Sapling", "Plant", "Flower", "Dried Flower"];
+
+  const getImageSrc = (stageIndex: number): string | null => {
+    switch (stageIndex) {
+      case 0:
+        return null; // Empty field
+      case 1:
+        return "/Seeding.png";
+      case 2:
+        return "/LittlePlant.png";
+      case 3:
+        return "/MiddlePlant.png";
+      case 4:
+        return plantType === "daisy" ? "/Daisy.png" : "/Tulip.png";
+      case 5:
+        return plantType === "daisy" ? "/DriedDaisy.png" : "/DriedTulip.png";
+      default:
+        return null;
+    }
+  };
 
   // when parent flags this field to start, initialize it
   useEffect(() => {
@@ -42,7 +63,15 @@ function Field({
   return (
     <div>
       <button className={styles.field} onClick={onClick}>
-        {states[index]}
+        {getImageSrc(index) ? (
+          <Image
+            src={getImageSrc(index)!}
+            alt={`Plant stage ${index}`}
+            width={76}
+            height={76}
+            style={{ objectFit: "contain" }}
+          />
+        ) : null}
       </button>
     </div>
   );
