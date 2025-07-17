@@ -128,21 +128,9 @@ The game features a beautiful, modern design with:
 - **CSS Modules**: Scoped styling with custom animations
 - **Local Storage**: Persistent user data for authentication
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - Built with Next.js and React
 - Icons and emojis for enhanced user experience
 - Modern CSS techniques for smooth animations
 - Responsive design principles
-
----
-
-**Happy Farming! 🌱** Start your agricultural adventure today and build the most profitable farm in the game!
