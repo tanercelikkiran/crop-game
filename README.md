@@ -36,7 +36,7 @@ A fun and engaging farming simulation game built with Next.js and React. Plant, 
 
 ```
 src/
-├── app/                    # Next.js App Router pages
+├── app/                   # Next.js App Router pages
 │   ├── game/              # Main game interface
 │   ├── store/             # Seed purchasing interface
 │   ├── signin/            # User authentication
