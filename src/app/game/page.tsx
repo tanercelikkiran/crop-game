@@ -13,14 +13,57 @@ export default function GamePage() {
   const seedContext = useContext(SeedContext);
   const router = useRouter();
 
-  // Remove popup logic, add plant type selection
+  // Plant type selection
   const [selectedPlant, setSelectedPlant] = useState<"tulip" | "daisy">(
     "tulip"
   );
-  const [fieldStages, setFieldStages] = useState<number[]>(Array(16).fill(0));
-  const [fieldPlantTypes, setFieldPlantTypes] = useState<(string | null)[]>(
-    Array(16).fill(null)
-  );
+
+  // Track which fields are growing and their plant types
+  const [fieldStates, setFieldStates] = useState<
+    Array<{
+      isGrowing: boolean;
+      plantType: "tulip" | "daisy" | null;
+    }>
+  >(Array(16).fill({ isGrowing: false, plantType: null }));
+
+  const handlePlantSeed = (fieldIndex: number) => {
+    // Only plant if field is empty and user has seeds
+    if (
+      !fieldStates[fieldIndex].isGrowing &&
+      seedContext &&
+      seedContext.seeds[selectedPlant].count > 0
+    ) {
+      seedContext.plantSeed(selectedPlant);
+
+      setFieldStates((prev) => {
+        const next = [...prev];
+        next[fieldIndex] = {
+          isGrowing: true,
+          plantType: selectedPlant,
+        };
+        return next;
+      });
+    }
+  };
+
+  const handleCollectPlant = (
+    fieldIndex: number,
+    plantType: "tulip" | "daisy"
+  ) => {
+    if (seedContext) {
+      seedContext.collectPlant(plantType);
+
+      // Reset field state
+      setFieldStates((prev) => {
+        const next = [...prev];
+        next[fieldIndex] = {
+          isGrowing: false,
+          plantType: null,
+        };
+        return next;
+      });
+    }
+  };
 
   return (
     <div>
@@ -50,45 +93,12 @@ export default function GamePage() {
         {Array.from({ length: 16 }, (_, i) => (
           <Field
             key={i}
-            onClick={() => {
-              const stage = fieldStages[i];
-              if (stage > 0) {
-                if (stage === 2) {
-                }
-                setFieldStages((prev) => {
-                  const next = [...prev];
-                  next[i] = stage === 1 ? 2 : 0; // seeded→flower, flower→empty
-                  return next;
-                });
-                // Reset plant type when field becomes empty
-                if (stage === 4) {
-                  // flower stage, next click will make it empty
-                  setFieldPlantTypes((prev) => {
-                    const next = [...prev];
-                    next[i] = null;
-                    return next;
-                  });
-                }
-              } else {
-                // Only plant if user has seeds of selected type
-                if (seedContext && seedContext.seeds[selectedPlant].count > 0) {
-                  seedContext.plantSeed(selectedPlant);
-                  setFieldStages((prev) => {
-                    const next = [...prev];
-                    next[i] = 1; // planted → seeded
-                    return next;
-                  });
-                  // Set the plant type for this field
-                  setFieldPlantTypes((prev) => {
-                    const next = [...prev];
-                    next[i] = selectedPlant;
-                    return next;
-                  });
-                }
-              }
-            }}
-            isGrowing={fieldStages[i] > 0}
-            plantType={fieldPlantTypes[i] as "tulip" | "daisy" | undefined}
+            onClick={() => handlePlantSeed(i)}
+            isGrowing={fieldStates[i].isGrowing}
+            plantType={
+              fieldStates[i].plantType as "tulip" | "daisy" | undefined
+            }
+            onCollect={(plantType) => handleCollectPlant(i, plantType)}
           />
         ))}
       </div>

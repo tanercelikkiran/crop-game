@@ -17,9 +17,12 @@ interface SeedContextType {
   seeds: SeedState;
   buySeed: (seedType: "tulip" | "daisy", cost: number) => boolean;
   plantSeed: (seedType: "tulip" | "daisy") => void;
+  collectPlant: (plantType: "tulip" | "daisy") => void;
 }
 
-export const SeedContext = createContext<SeedContextType | undefined>(undefined);
+export const SeedContext = createContext<SeedContextType | undefined>(
+  undefined
+);
 
 export function SeedProvider({ children }: { children: ReactNode }) {
   const balanceContext = useContext(BalanceContext);
@@ -61,12 +64,21 @@ export function SeedProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const collectPlant = (plantType: "tulip" | "daisy"): void => {
+    if (!balanceContext) return;
+
+    // Reward different amounts based on plant type
+    const reward = plantType === "daisy" ? 30 : 20; // Daisy gives more reward since it costs more
+    balanceContext.increaseBalance(reward);
+  };
+
   return (
     <SeedContext.Provider
       value={{
         seeds,
         buySeed,
         plantSeed,
+        collectPlant,
       }}
     >
       {children}

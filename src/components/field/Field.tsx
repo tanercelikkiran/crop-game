@@ -7,10 +7,12 @@ function Field({
   onClick,
   isGrowing: startGrowing,
   plantType,
+  onCollect,
 }: {
   onClick: () => void;
   isGrowing: boolean;
   plantType?: "tulip" | "daisy";
+  onCollect?: (plantType: "tulip" | "daisy") => void;
 }) {
   const [index, setIndex] = useState(0);
   const [isGrowing, setIsGrowing] = useState(false);
@@ -62,7 +64,23 @@ function Field({
 
   return (
     <div>
-      <button className={styles.field} onClick={onClick}>
+      <button
+        className={styles.field}
+        onClick={() => {
+          // If field is growing (any stage), reset it
+          if (isGrowing && index > 0) {
+            // Only give money if in flower stage (stage 4)
+            if (index === 4 && plantType && onCollect) {
+              onCollect(plantType);
+            }
+            setIndex(0); // Reset field to empty
+            setIsGrowing(false);
+          } else {
+            // If field is empty, let parent handle the click (for planting)
+            onClick();
+          }
+        }}
+      >
         {getImageSrc(index) ? (
           <Image
             src={getImageSrc(index)!}
