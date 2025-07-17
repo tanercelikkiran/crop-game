@@ -65,7 +65,7 @@ function Field({
   return (
     <div>
       <button
-        className={styles.field}
+        className={`${styles.field} ${isGrowing ? styles.growing : ""}`}
         onClick={() => {
           // If field is growing (any stage), reset it
           if (isGrowing && index > 0) {
@@ -87,6 +87,7 @@ function Field({
             alt={`Plant stage ${index}`}
             width={76}
             height={76}
+            className={styles.fieldImage}
             style={{ objectFit: "contain" }}
           />
         ) : null}

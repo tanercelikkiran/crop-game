@@ -66,29 +66,34 @@ export default function GamePage() {
   };
 
   return (
-    <div>
-      <div style={{ marginBottom: 16 }}>
-        <button
-          onClick={() => setSelectedPlant("tulip")}
-          style={{
-            marginRight: 8,
-            background: selectedPlant === "tulip" ? "#aaf" : undefined,
-          }}
-        >
-          Tulip ({seedContext?.seeds.tulip.count ?? 0})
-        </button>
-        <button
-          onClick={() => setSelectedPlant("daisy")}
-          style={{
-            background: selectedPlant === "daisy" ? "#aaf" : undefined,
-          }}
-        >
-          Daisy ({seedContext?.seeds.daisy.count ?? 0})
-        </button>
+    <div className={styles.pageContainer}>
+      <div className={styles.gameHeader}>
+        <div className={styles.plantSelector}>
+          <button
+            onClick={() => setSelectedPlant("tulip")}
+            className={`${styles.plantButton} ${styles.tulipButton} ${
+              selectedPlant === "tulip"
+                ? `${styles.plantButtonActive} ${styles.tulipButtonActive}`
+                : ""
+            }`}
+          >
+            🌷 Tulip ({seedContext?.seeds.tulip.count ?? 0})
+          </button>
+          <button
+            onClick={() => setSelectedPlant("daisy")}
+            className={`${styles.plantButton} ${styles.daisyButton} ${
+              selectedPlant === "daisy"
+                ? `${styles.plantButtonActive} ${styles.daisyButtonActive}`
+                : ""
+            }`}
+          >
+            🌼 Daisy ({seedContext?.seeds.daisy.count ?? 0})
+          </button>
+        </div>
+        <label className={styles.balanceLabel} htmlFor="fieldCount">
+          💰 Balance: ${balanceContext?.balance}
+        </label>
       </div>
-      <label className={styles.balanceLabel} htmlFor="fieldCount">
-        Balance: {balanceContext?.balance}
-      </label>
       <div className={styles.gameContainer}>
         {Array.from({ length: 16 }, (_, i) => (
           <Field
@@ -102,8 +107,17 @@ export default function GamePage() {
           />
         ))}
       </div>
-      <Button onClick={() => router.push("/")}>Exit</Button>
-      <Button onClick={() => router.push("/store")}>Go to Store</Button>
+      <div className={styles.gameFooter}>
+        <Button onClick={() => router.push("/")} className={styles.exitButton}>
+          🏠 Exit
+        </Button>
+        <Button
+          onClick={() => router.push("/store")}
+          className={styles.storeButton}
+        >
+          🛒 Go to Store
+        </Button>
+      </div>
     </div>
   );
 }

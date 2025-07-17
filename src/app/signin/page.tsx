@@ -4,6 +4,7 @@ import Button from "@/components/button/Button";
 import InputBox from "@/components/input-box/InputBox";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import styles from "./page.module.css";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -12,7 +13,6 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
 
   const getCredentials = () => {
-    // It will get credentials from a local storage as json list
     const credentials = localStorage.getItem("users");
     return credentials ? JSON.parse(credentials) : [];
   };
@@ -39,26 +39,49 @@ export default function SignInPage() {
   };
 
   return (
-    <div>
-      <InputBox
-        type="username"
-        value={username}
-        placeholder="Enter your username"
-        onChange={(e) => setUsername(e.target.value)}
-      >
-        Username:
-      </InputBox>
+    <div className={styles.container}>
+      <div className={styles.authCard}>
+        <h1 className={styles.title}>🔑 Sign In</h1>
+        <p className={styles.subtitle}>
+          Welcome back! Please sign in to your account
+        </p>
 
-      <InputBox
-        type="password"
-        value={password}
-        placeholder="Enter your password"
-        onChange={(e) => setPassword(e.target.value)}
-      >
-        Password:
-      </InputBox>
+        <div className={styles.formContainer}>
+          <div className={styles.inputWrapper}>
+            <InputBox
+              type="username"
+              value={username}
+              placeholder="Enter your username"
+              onChange={(e) => setUsername(e.target.value)}
+            >
+              Username:
+            </InputBox>
+          </div>
 
-      <Button onClick={handleSignIn}>Sign In</Button>
+          <div className={styles.inputWrapper}>
+            <InputBox
+              type="password"
+              value={password}
+              placeholder="Enter your password"
+              onChange={(e) => setPassword(e.target.value)}
+            >
+              Password:
+            </InputBox>
+          </div>
+
+          <div className={styles.buttonContainer}>
+            <Button onClick={handleSignIn} className={styles.signInButton}>
+              Sign In
+            </Button>
+            <Button
+              onClick={() => router.push("/")}
+              className={styles.backButton}
+            >
+              ← Back to Home
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

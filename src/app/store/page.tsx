@@ -12,47 +12,61 @@ export default function StorePage() {
   const router = useRouter();
 
   return (
-    <div className={styles.chooseBox}>
-      <h2>Choose your crop to buy</h2>
-      {seedContext &&
-        Object.keys(seedContext.seeds).map((type, index) => (
-          <div key={index} className={styles.cropItem}>
-            <Image
-              src={`/images/${type}.png`}
-              alt={`${type} image`}
-              width={100}
-              height={100}
-            />
-            <h3>{type.charAt(0).toUpperCase() + type.slice(1)}</h3>
-            <p>
-              Price:{" "}
-              {seedContext.seeds[type as keyof typeof seedContext.seeds].price}{" "}
-              coins
-            </p>
-            <Button
-              onClick={() => {
-                seedContext.buySeed(
-                  type as "tulip" | "daisy",
-                  seedContext.seeds[type as keyof typeof seedContext.seeds]
-                    .price
-                );
-              }}
-            >
-              Buy {type.charAt(0).toUpperCase() + type.slice(1)}
-            </Button>
-            <label>
-              Amount:{" "}
-              {seedContext.seeds[type as keyof typeof seedContext.seeds].count}
-            </label>
-          </div>
-        ))}
+    <div className={styles.storeContainer}>
+      <div className={styles.chooseBox}>
+        <h2>🛒 Choose your crop to buy</h2>
+        <div className={styles.cropGrid}>
+          {seedContext &&
+            Object.keys(seedContext.seeds).map((type, index) => (
+              <div key={index} className={styles.cropItem}>
+                <Image
+                  src={`/${type === "tulip" ? "Tulip" : "Daisy"}.png`}
+                  alt={`${type} image`}
+                  width={80}
+                  height={80}
+                />
+                <h3>
+                  {type === "tulip" ? "🌷" : "🌼"}{" "}
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </h3>
+                <p>
+                  💰 Price:{" "}
+                  {
+                    seedContext.seeds[type as keyof typeof seedContext.seeds]
+                      .price
+                  }{" "}
+                  coins
+                </p>
+                <Button
+                  onClick={() => {
+                    seedContext.buySeed(
+                      type as "tulip" | "daisy",
+                      seedContext.seeds[type as keyof typeof seedContext.seeds]
+                        .price
+                    );
+                  }}
+                >
+                  Buy {type.charAt(0).toUpperCase() + type.slice(1)}
+                </Button>
+                <label>
+                  📦 Amount:{" "}
+                  {
+                    seedContext.seeds[type as keyof typeof seedContext.seeds]
+                      .count
+                  }
+                </label>
+              </div>
+            ))}
+        </div>
         <Button
           onClick={() => {
             router.push("/game");
           }}
+          className={styles.gameButton}
         >
-          Go to Game
+          🎮 Go to Game
         </Button>
+      </div>
     </div>
   );
 }
