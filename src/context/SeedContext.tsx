@@ -16,6 +16,11 @@ interface SeedState {
 interface SeedContextType {
   seeds: SeedState;
   buySeed: (seedType: "tulip" | "daisy", cost: number) => boolean;
+  bulkBuySeed: (
+    seedType: "tulip" | "daisy",
+    quantity: number,
+    totalCost: number
+  ) => boolean;
   plantSeed: (seedType: "tulip" | "daisy") => void;
   collectPlant: (plantType: "tulip" | "daisy") => void;
 }
@@ -49,6 +54,29 @@ export function SeedProvider({ children }: { children: ReactNode }) {
     return true;
   };
 
+  const bulkBuySeed = (
+    seedType: "tulip" | "daisy",
+    quantity: number,
+    totalCost: number
+  ): boolean => {
+    if (!balanceContext || balanceContext.balance < totalCost) {
+      alert(
+        `Insufficient funds to purchase ${quantity} ${seedType}s. Total cost: ${totalCost} coins.`
+      );
+      return false;
+    }
+
+    balanceContext.decreaseBalance(totalCost);
+    setSeeds((prev) => ({
+      ...prev,
+      [seedType]: {
+        ...prev[seedType],
+        count: prev[seedType].count + quantity,
+      },
+    }));
+    return true;
+  };
+
   const plantSeed = (seedType: "tulip" | "daisy"): void => {
     if (seeds[seedType].count <= 0) {
       alert(`No ${seedType}s available to plant.`);
@@ -77,6 +105,7 @@ export function SeedProvider({ children }: { children: ReactNode }) {
       value={{
         seeds,
         buySeed,
+        bulkBuySeed,
         plantSeed,
         collectPlant,
       }}

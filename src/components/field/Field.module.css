@@ -1,11 +1,9 @@
 .field {
     width: 100px;
     height: 100px;
-    padding: 8px;
     border-radius: 12px;
     cursor: pointer;
     background: #8b4513;
-    color: aliceblue;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -24,10 +22,6 @@
 
 .fieldImage {
     transition: transform 0.2s ease;
-}
-
-.field:hover .fieldImage {
-    transform: scale(1.05);
 }
 
 .growing {
