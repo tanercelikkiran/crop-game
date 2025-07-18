@@ -96,7 +96,7 @@ export function SeedProvider({ children }: { children: ReactNode }) {
     if (!balanceContext) return;
 
     // Reward different amounts based on plant type
-    const reward = plantType === "daisy" ? 30 : 20; // Daisy gives more reward since it costs more
+    const reward = plantType === "daisy" ? 40 : 20; // Daisy gives more reward since it costs more
     balanceContext.increaseBalance(reward);
   };
 
